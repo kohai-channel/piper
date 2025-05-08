@@ -11,6 +11,9 @@ import torch
 from .vits.utils import audio_float_to_int16
 from .vits.wavfile import write as write_wav
 
+import pathlib
+
+torch.serialization.add_safe_globals([pathlib.PosixPath])
 _LOGGER = logging.getLogger("piper_train.infer_generator")
 
 
@@ -26,7 +29,7 @@ def main():
     args.output_dir = Path(args.output_dir)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    model = torch.load(args.model)
+    model = torch.load(args.model, weights_only=True)
 
     # Inference only
     model.eval()

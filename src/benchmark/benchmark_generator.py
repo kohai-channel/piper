@@ -5,12 +5,12 @@ import json
 import time
 import statistics
 import sys
-
+import pathlib
 import torch
 
 _LOGGER = logging.getLogger(__name__)
 
-
+torch.serialization.add_safe_globals([pathlib.PosixPath])
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -30,7 +30,7 @@ def main() -> None:
     utterances = [json.loads(line) for line in sys.stdin]
 
     start_time = time.monotonic_ns()
-    model = torch.load(args.model)
+    model = torch.load(args.model, weights_only=True)
     end_time = time.monotonic_ns()
 
     model.eval()

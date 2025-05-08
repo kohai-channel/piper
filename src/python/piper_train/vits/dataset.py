@@ -8,6 +8,9 @@ import torch
 from torch import FloatTensor, LongTensor
 from torch.utils.data import Dataset
 
+import pathlib
+
+torch.serialization.add_safe_globals([pathlib.PosixPath])
 _LOGGER = logging.getLogger("vits.dataset")
 
 
@@ -77,8 +80,8 @@ class PiperDataset(Dataset):
         utt = self.utterances[idx]
         return UtteranceTensors(
             phoneme_ids=LongTensor(utt.phoneme_ids),
-            audio_norm=torch.load(utt.audio_norm_path),
-            spectrogram=torch.load(utt.audio_spec_path),
+            audio_norm=torch.load(utt.audio_norm_path, weights_only=True),
+            spectrogram=torch.load(utt.audio_spec_path, weights_only=True),
             speaker_id=LongTensor([utt.speaker_id])
             if utt.speaker_id is not None
             else None,

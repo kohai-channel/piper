@@ -6,6 +6,9 @@ from pathlib import Path
 
 import torch
 
+import pathlib
+
+torch.serialization.add_safe_globals([pathlib.PosixPath])
 _LOGGER = logging.getLogger()
 
 
@@ -32,7 +35,7 @@ def main() -> None:
 
         try:
             _LOGGER.debug("Checking %s", pt_path)
-            torch.load(str(pt_path))
+            torch.load(str(pt_path), weights_only=True)
         except Exception:
             _LOGGER.error(pt_path)
             if args.delete:
